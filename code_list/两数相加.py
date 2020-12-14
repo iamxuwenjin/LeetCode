@@ -14,14 +14,36 @@ description：
 
 
 # Definition for singly-linked list.
-class ListNode:
-    def __init__(self, x):
-        self.val = x
-        self.next = None
+class ListNode(object):
+    def __init__(self, val=0, next_node=None):
+        self.val = val
+        self.next = next_node
 
 
 class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        pass
+    @staticmethod
+    def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
+        val_1 = l1.val
+        val_2 = l2.val
+        flag = (val_1 + val_2) // 10
+        res_val = (val_1 + val_2) % 10
+        res_list = [str(res_val)]
+        l1_next = l1.next
+        l2_next = l2.next
+        while (l1_next is not None) or (l2_next is not None) or flag:
+            val_1 = 0 if l1_next is None else l1_next.val
+            val_2 = 0 if l2_next is None else l2_next.val
+            sum_num = val_1 + val_2 + flag
+            flag = sum_num // 10
+            res_val = sum_num % 10
+            res_list.insert(0, str(res_val))
+            l1_next = l1_next.next if l1_next is not None else None
+            l2_next = l2_next.next if l2_next is not None else None
+        num = ''.join(res_list)
+        len_num = len(num)
+        result = ListNode(int(num[0]))
+        for i in range(1, len_num):
+            result = ListNode(int(num[i]), result)
+        return result
 
 
