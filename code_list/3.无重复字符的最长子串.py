@@ -14,10 +14,10 @@ class Solution:
     @staticmethod
     def length_of_longest_sub_string(s: str) -> int:
         # 遍历O(n^2)
-        n = len(s)
-        count = 1
-        if n == 1:
-            return count
+        # n = len(s)
+        # count = 1
+        # if n == 1:
+        #     return count
         # for i in range(n):
         #     for j in range(i + 1, n):
         #         if s[i] == s[j]:
@@ -27,23 +27,24 @@ class Solution:
 
         # 滑动窗口
         # 开始枚举每一个字符
-        j = 1
-        dup = set()
-        i = 0
-        while i < n:
-            val = s[i]
-            # 找到与字符串第一个字符相同的字符
-            while j < n:
-                r_val = s[j]
-                if val == r_val:
-                    if j - i > count:
-                        count = j - i
-                    break
-                j += 1
-        return count
+        occ = set()
+        n = len(s)
+        # 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+        rk, ans = -1, 0
+        for i in range(n):
+            if i != 0:
+                # 左指针向右移动一格，移除一个字符
+                occ.remove(s[i - 1])
+            while rk + 1 < n and s[rk + 1] not in occ:
+                # 不断地移动右指针
+                occ.add(s[rk + 1])
+                rk += 1
+            # 第 i 到 rk 个字符是一个极长的无重复字符子串
+            ans = max(ans, rk - i + 1)
+        return ans
 
 
 if __name__ == '__main__':
-    string = 'pwwkew'
+    string = "abcabcbb"
     ins = Solution()
     print(ins.length_of_longest_sub_string(string))
