@@ -35,7 +35,7 @@ class Solution:
 
     def heap_sort(self, nums: list, root_idx, length):
         """
-        构建小顶堆
+        构建大顶堆
         :param nums:
         :param root_idx:
         :param length:
@@ -44,9 +44,9 @@ class Solution:
         idx = root_idx * 2 + 1
 
         while idx <= length:
-            if idx < length and nums[idx] > nums[idx + 1]:
+            if idx < length and nums[idx] < nums[idx + 1]:
                 idx += 1
-            if nums[root_idx] > nums[idx]:
+            if nums[root_idx] < nums[idx]:
                 nums[root_idx], nums[idx] = nums[idx], nums[root_idx]
                 root_idx = idx
                 idx = idx * 2 + 1
@@ -55,6 +55,6 @@ class Solution:
 
 
 if __name__ == '__main__':
-    a = [2, 4, 6, 1, 1, 2]
+    a = [3, 2, 1, 5, 6, 4]
     so = Solution()
     print(so.find_Kth_largest(a, 2))
