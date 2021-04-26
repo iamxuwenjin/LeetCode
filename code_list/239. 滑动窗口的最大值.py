@@ -15,23 +15,43 @@ import heapq
 class Solution:
     def max_sliding_window(self, nums: list, k: int) -> list:
         n = len(nums)
-        # 注意 Python 默认的优先队列是小根堆
-        q = [(-nums[i], i) for i in range(k)]
-        heapq.heapify(q)
+        # 构建大根堆
+        window = [(i, nums[i]) for i in range(k)]
+        for i in range(k // 2 - 1, -1, -1):
+            self._heapify(window, i, k - 1)
+        ans = [window[0][1]]
+        start = 1
+        while start + k - 1 < n:
+            window.append((start + k - 1, nums[start + k - 1]))
 
-        ans = [-q[0][0]]
-        for i in range(k, n):
-            heapq.heappush(q, (-nums[i], i))
-            while q[0][1] <= i - k:
-                heapq.heappop(q)
-            ans.append(-q[0][0])
+            for i in range(len(window) // 2 - 1, -1, -1):
+                self._heapify(window, i, len(window) - 1)
 
+            # 判断堆顶的元素是否在窗口内
+            while window[0][0] < start:
+                window = window[1:]
+                for i in range(len(window) // 2 - 1, -1, -1):
+                    self._heapify(window, i, len(window) - 1)
+            ans.append(window[0][1])
+            start += 1
         return ans
+
+    def _heapify(self, nums, root_idx, last_idx):
+        idx = root_idx * 2 + 1
+        while idx <= last_idx:
+            if idx < last_idx and nums[idx][1] < nums[idx + 1][1]:
+                idx += 1
+            if nums[root_idx][1] < nums[idx][1]:
+                nums[root_idx], nums[idx] = nums[idx], nums[root_idx]
+                root_idx = idx
+                idx = idx * 2 + 1
+            else:
+                break
 
 
 if __name__ == '__main__':
     s = Solution()
-    nums = [1, 3, -1, -3, 5, 3, 6, 7]
-    k = 3
+    nums = [4, -2]
+    k = 2
     res = s.max_sliding_window(nums, k)
     print(res)
