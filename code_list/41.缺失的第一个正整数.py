@@ -71,7 +71,6 @@ class Solution(object):
         pass
 
 
-
 if __name__ == '__main__':
     num_list = [7, 8, 9, 11, 12]
     s = Solution()
